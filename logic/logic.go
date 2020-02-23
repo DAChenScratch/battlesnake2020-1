@@ -11,6 +11,7 @@ const (
 	Right Direction = "right"
 )
 
-func GetMoves(data *api.MoveRequest) Direction {
+func GetMove(data *api.MoveRequest) Direction {
+	state := InitState(data)
 	return Up
 }
