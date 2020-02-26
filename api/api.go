@@ -7,8 +7,10 @@ import (
 
 // StartRequest is specified by the
 // 2019 battlesnake API
+// NOTE: Deprecated for 2020, now uses same schema
+// as MoveRequest. Changes reflected in routes.go.
 type StartRequest struct {
-	GameID int
+	Game   game
 	Width  int
 	Height int
 }
