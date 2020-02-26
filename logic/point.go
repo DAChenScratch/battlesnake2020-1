@@ -12,11 +12,13 @@ func (p Point) To(d Direction) *Point {
 	case Left:
 		return &Point{X: p.X - 1, Y: p.Y}
 	case Down:
-		return &Point{X: p.X, Y: p.Y - 1}
-	case Up:
 		return &Point{X: p.X, Y: p.Y + 1}
+	case Up:
+		return &Point{X: p.X, Y: p.Y - 1}
 	case Right:
 		return &Point{X: p.X + 1, Y: p.Y}
+	default:
+		return &Point{-1, -1}
 	}
 }
 
