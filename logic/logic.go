@@ -24,7 +24,7 @@ func GetMove(data *api.MoveRequest) Direction {
 	for _, moves := range moveslice {
 		state.applyAllMoves(moves)
 
-		if m := state.minimax(4, id, true); m > value {
+		if m := state.alphaBeta(5, math.Inf(-1), math.Inf(1), id, true); m > value {
 			value = m
 			for _, move := range moves {
 				if move.ID == id {
@@ -61,6 +61,42 @@ func (s *State) minimax(depth int, snakeID string, maximizing bool) float64 {
 			value = math.Min(value, s.minimax(depth-1, snakeID, true))
 
 			s.undoAllMoves(child)
+		}
+		return value
+	}
+}
+
+func (s *State) alphaBeta(depth int, alpha, beta float64, snakeID string, maximizing bool) float64 {
+	if depth == 0 /* or if game is over */ {
+		return s.heuristic(snakeID)
+	}
+	children := s.getChildMoves()
+	if maximizing {
+		value := math.Inf(-1)
+		for _, child := range children {
+			s.applyAllMoves(child)
+
+			value = math.Max(value, s.alphaBeta(depth-1, alpha, beta, snakeID, false))
+			alpha = math.Max(alpha, value)
+
+			s.undoAllMoves(child)
+			if alpha >= beta {
+				break
+			}
+		}
+		return value
+	} else {
+		value := math.Inf(1)
+		for _, child := range children {
+			s.applyAllMoves(child)
+
+			value = math.Min(value, s.alphaBeta(depth-1, alpha, beta, snakeID, true))
+			beta = math.Min(beta, value)
+
+			s.undoAllMoves(child)
+			if alpha >= beta {
+				break
+			}
 		}
 		return value
 	}
