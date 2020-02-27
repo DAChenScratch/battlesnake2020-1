@@ -95,17 +95,16 @@ func (s State) allMoves() map[string][]Move {
 // TODO: Maybe replace with actual alhpa-beta pruning at some point.
 func (s State) filterDeath(movemap map[string][]Move) map[string][]Move {
 	for id, moves := range movemap {
-		for i, move := range moves {
-			p := s.getSnake(id).Head().To(move.Forward)
-			if p.X < 0 || p.X >= s.Width || p.Y < 0 || p.Y >= s.Height {
-				// Out of bounds
-				movemap[id] = append(movemap[id][:i], movemap[id][i+1:]...)
+		i := 0
+		for {
+			if i >= len(movemap[id]) {
+				break
 			}
-			for _, snake := range s.Snakes {
-				if p.In(snake.Body) {
-					movemap[id] = append(movemap[id][:i], movemap[id][i+1:]...)
-					break
-				}
+			p := s.getSnake(id).Head().To(moves[i].Forward)
+			if s.outOfBounds(p) || s.inSnakeBody(p) {
+				movemap[id] = append(movemap[id][:i], movemap[id][i+1:]...)
+			} else {
+				i++
 			}
 		}
 	}
