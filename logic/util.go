@@ -5,7 +5,9 @@ package logic
 func cartesianProduct(moves [][]Move) [][]Move {
 	n := 1
 	for _, m := range moves {
-		n = n * len(m)
+		if len(m) != 0 {
+			n = n * len(m)
+		}
 	}
 	ret := make([][]Move, n)
 	k := 0
@@ -13,7 +15,9 @@ func cartesianProduct(moves [][]Move) [][]Move {
 	for tmp := make([]int, len(moves)); tmp[0] < lengths(0); nextIndex(tmp, lengths) {
 		var m []Move
 		for i, j := range tmp {
-			m = append(m, moves[i][j])
+			if len(moves[i]) != 0 {
+				m = append(m, moves[i][j])
+			}
 		}
 		ret[k] = m
 		k++
