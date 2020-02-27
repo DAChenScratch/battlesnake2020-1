@@ -16,8 +16,26 @@ const (
 )
 
 func GetMove(data *api.MoveRequest) Direction {
-	// state := InitState(data)
-	return Up
+	id := data.You.ID
+	state := InitState(data)
+	var dir Direction
+	value := math.Inf(-1)
+	moveslice := state.getChildMoves()
+	for _, moves := range moveslice {
+		state.applyAllMoves(moves)
+
+		if m := state.minimax(4, id, true); m > value {
+			value = m
+			for _, move := range moves {
+				if move.ID == id {
+					dir = move.Forward
+				}
+			}
+		}
+
+		state.undoAllMoves(moves)
+	}
+	return dir
 }
 
 func (s *State) minimax(depth int, snakeID string, maximizing bool) float64 {
