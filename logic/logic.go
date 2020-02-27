@@ -16,15 +16,20 @@ const (
 )
 
 func GetMove(data *api.MoveRequest) Direction {
-	id := data.You.ID
 	state := InitState(data)
+	return state.getDir()
+}
+
+// This is just here to reduce clutter in alphaBeta.
+func (s *State) getDir() Direction {
+	id := s.YouID
 	var dir Direction
 	value := math.Inf(-1)
-	moveslice := state.getChildMoves()
+	moveslice := s.getChildMoves()
 	for _, moves := range moveslice {
-		state.applyAllMoves(moves)
+		s.applyAllMoves(moves)
 
-		if m := state.alphaBeta(5, math.Inf(-1), math.Inf(1), id, true); m > value {
+		if m := s.alphaBeta(4, math.Inf(-1), math.Inf(1), id, true); m > value {
 			value = m
 			for _, move := range moves {
 				if move.ID == id {
@@ -33,7 +38,7 @@ func GetMove(data *api.MoveRequest) Direction {
 			}
 		}
 
-		state.undoAllMoves(moves)
+		s.undoAllMoves(moves)
 	}
 	return dir
 }

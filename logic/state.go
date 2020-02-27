@@ -7,6 +7,7 @@ import (
 )
 
 type State struct {
+	YouID  string
 	Height int
 	Width  int
 	Food   []Point
@@ -15,6 +16,7 @@ type State struct {
 
 func InitState(data *api.MoveRequest) *State {
 	s := &State{}
+	s.YouID = data.You.ID
 	s.Height = data.Board.Height
 	s.Width = data.Board.Width
 	s.Food = make([]Point, len(data.Board.Food))
