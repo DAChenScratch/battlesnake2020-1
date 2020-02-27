@@ -1,2 +1,5 @@
 battlesnake2020
 *.swp
+data/
+*.log
+*.json
