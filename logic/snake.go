@@ -20,6 +20,8 @@ func (s Snake) Tail() Point {
 
 // m is assumed to be within the bounds of the board.
 func (s *Snake) applyMove(m Move) {
+	// TODO: Check if a snake eats food and if so,
+	// leave its tail next turn
 	s.Body.PushFront(s.Head().To(m.Forward))
 	s.Body.Remove(s.Body.Back())
 }
