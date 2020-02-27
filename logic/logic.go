@@ -58,7 +58,7 @@ func (s *State) minimax(depth int, snakeID string, maximizing bool) float64 {
 		for _, child := range children {
 			s.applyAllMoves(child)
 
-			value = math.Min(value, s.minimax(depth-1, snakeID, false))
+			value = math.Min(value, s.minimax(depth-1, snakeID, true))
 
 			s.undoAllMoves(child)
 		}
