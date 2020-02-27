@@ -12,6 +12,6 @@ const (
 )
 
 func GetMove(data *api.MoveRequest) Direction {
-	state := InitState(data)
+	// state := InitState(data)
 	return Up
 }

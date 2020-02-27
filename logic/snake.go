@@ -10,12 +10,12 @@ type Snake struct {
 	ID     string
 }
 
-func (s Snake) Head() *Point {
-	return s.Body.Front().Value.(*Point)
+func (s Snake) Head() Point {
+	return s.Body.Front().Value.(Point)
 }
 
-func (s Snake) Tail() *Point {
-	return s.Body.Back().Value.(*Point)
+func (s Snake) Tail() Point {
+	return s.Body.Back().Value.(Point)
 }
 
 // m is assumed to be within the bounds of the board.

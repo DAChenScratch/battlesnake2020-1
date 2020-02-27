@@ -9,7 +9,7 @@ import (
 type State struct {
 	Height int
 	Width  int
-	Food   []*Point
+	Food   []Point
 	Snakes map[string]*Snake
 }
 
@@ -17,15 +17,15 @@ func InitState(data *api.MoveRequest) *State {
 	s := &State{}
 	s.Height = data.Board.Height
 	s.Width = data.Board.Width
-	s.Food = make([]*Point, len(data.Board.Food))
+	s.Food = make([]Point, len(data.Board.Food))
 	for i, f := range data.Board.Food {
-		s.Food[i] = &Point{X: f.X, Y: f.Y}
+		s.Food[i] = Point{X: f.X, Y: f.Y}
 	}
 	s.Snakes = make(map[string]*Snake)
 	for _, snake := range data.Board.Snakes {
 		b := list.New()
 		for _, p := range snake.Body {
-			b.PushBack(&Point{X: p.X, Y: p.Y})
+			b.PushBack(Point{X: p.X, Y: p.Y})
 		}
 		s.Snakes[snake.ID] = &Snake{
 			Body:   b,
@@ -44,7 +44,7 @@ func InitState(data *api.MoveRequest) *State {
 type Move struct {
 	ID      string    // ID of snake to move
 	Forward Direction // Direction to move
-	Tail    *Point    // Current position of tail to undo move
+	Tail    Point     // Current position of tail to undo move
 }
 
 // m is assumed to be within the bounds of the board.
