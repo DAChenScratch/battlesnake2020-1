@@ -73,8 +73,22 @@ func (s State) heuristic(snakeID string) float64 {
 	if s.outOfBounds(head) {
 		return math.Inf(-1)
 	}
-	if s.inSnakeBody(head) {
-		return math.Inf(-1)
+	for _, snake := range s.Snakes {
+		if snake.ID == you.ID {
+			continue
+		}
+		if head.In(snake.Body) {
+			// TODO: Check all snakes as below (without the head) and
+			// check heads separately (in the cas where the other snake
+			// is smaller, we can consider its head safe).
+
+			return math.Inf(-1)
+		}
+		for p := you.Body.Front().Next(); p != nil; p = p.Next() {
+			if head.X == p.Value.(Point).X && head.Y == p.Value.(Point).Y {
+				return math.Inf(-1)
+			}
+		}
 	}
 	return math.Inf(1)
 }
