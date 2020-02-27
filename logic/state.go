@@ -92,6 +92,7 @@ func (s State) allMoves() map[string][]Move {
 }
 
 // Removes all moves that would kill the snake.
+// TODO: Maybe replace with actual alhpa-beta pruning at some point.
 func (s State) filterDeath(movemap map[string][]Move) map[string][]Move {
 	for id, moves := range movemap {
 		for i, move := range moves {
