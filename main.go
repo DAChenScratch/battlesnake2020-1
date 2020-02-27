@@ -10,8 +10,13 @@ import (
 )
 
 var startResp = api.StartResponse{Color: "#75CEDD", SecondaryColor: "#7A75DD"}
-var movelog map[string]*log.Logger
-var movelog_file map[string]*os.File
+
+type LogFile struct {
+	logger *log.Logger
+	file   *os.File
+}
+
+var movelog map[string]LogFile
 var logging bool // Turns on logging JSON move data for replaying games
 
 func main() {
@@ -19,8 +24,7 @@ func main() {
 	if len(args) > 0 {
 		// Who needs argparse anyway
 		if args[0] == "log" {
-			movelog = make(map[string]*log.Logger)
-			movelog_file = make(map[string]*os.File)
+			movelog = make(map[string]LogFile)
 			log.Printf("Logging enabled")
 			logging = true
 		}

@@ -22,8 +22,12 @@ func start(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		movelog_file[id] = logfile
-		movelog[id] = log.New(logfile, "", 0)
+
+		logger := log.New(logfile, "", 0)
+
+		lf := LogFile{logger, logfile}
+
+		movelog[id] = lf
 	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(startResp)
@@ -43,7 +47,7 @@ func move(w http.ResponseWriter, req *http.Request) {
 	log.Printf("MOVE: %s\n", move)
 	if logging {
 		jsonstr, _ := json.Marshal(data)
-		movelog[data.Game.ID].Printf("%s\n", jsonstr)
+		movelog[data.Game.ID].logger.Printf("%s\n", jsonstr)
 	}
 
 	resp := &api.MoveResponse{Move: string(move)} // Get Move
@@ -53,7 +57,8 @@ func move(w http.ResponseWriter, req *http.Request) {
 }
 
 func end(w http.ResponseWriter, req *http.Request) {
-	data, err := api.NewMoveRequest(req)
+	// data, err := api.NewMoveRequest(req)
+	_, err := api.NewMoveRequest(req)
 	// log.Printf("%+v\n", data)
 	if err != nil {
 		log.Printf("Bad move request: %v\n", err)
@@ -62,10 +67,13 @@ func end(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	if logging {
-		id := data.Game.ID
-		movelog_file[id].Close()
-		delete(movelog_file, id)
-		delete(movelog, id)
+		// For some reason the battlesnake server is sending the
+		// end request before any move requests, so the snake
+		// crashes becase the log file is closed.
+
+		// id := data.Game.ID
+		// movelog[id].file.Close()
+		// delete(movelog, id)
 	}
 }
 
