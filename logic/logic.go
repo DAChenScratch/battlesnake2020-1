@@ -26,10 +26,24 @@ func (s *State) getDir() Direction {
 	var dir Direction
 	value := math.Inf(-1)
 	moveslice := s.getChildMoves()
+	var depth int
+	switch len(s.Snakes) {
+	case 2:
+		depth = 12
+	case 3:
+		depth = 7
+	case 4:
+		depth = 4
+	case 5:
+		depth = 2
+	default:
+		depth = 1
+	}
+
 	for _, moves := range moveslice {
 		s.applyAllMoves(moves)
 
-		if m := s.alphaBeta(4, math.Inf(-1), math.Inf(1), id, true); m > value {
+		if m := s.alphaBeta(depth, math.Inf(-1), math.Inf(1), id, true); m > value {
 			value = m
 			for _, move := range moves {
 				if move.ID == id {
