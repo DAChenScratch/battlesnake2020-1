@@ -24,8 +24,7 @@ func (s *State) minimax(depth int, snakeID string, maximizing bool) float64 {
 	if depth == 0 /* or if game is over */ {
 		return s.heuristic(snakeID)
 	}
-	// children := s.getChildMoves() // TODO
-	children := [][]Move{}
+	children := s.getChildMoves()
 	if maximizing {
 		value := math.Inf(-1)
 		for _, child := range children {

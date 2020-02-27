@@ -111,3 +111,13 @@ func (s State) filterDeath(movemap map[string][]Move) map[string][]Move {
 	}
 	return movemap
 }
+
+func (s State) getChildMoves() [][]Move {
+	moves := s.filterDeath(s.allMoves())
+	var moveslice [][]Move
+	for _, m := range moves {
+		// Map -> slice to take cartesian product
+		moveslice = append(moveslice, m)
+	}
+	return cartesianProduct(moveslice)
+}
