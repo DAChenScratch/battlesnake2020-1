@@ -56,6 +56,18 @@ func (s *State) undoMove(m Move) {
 	s.Snakes[m.ID].undoMove(m)
 }
 
+func (s *State) applyAllMoves(moves []Move) {
+	for _, move := range moves {
+		s.applyMove(move)
+	}
+}
+
+func (s *State) undoAllMoves(moves []Move) {
+	for _, move := range moves {
+		s.undoMove(move)
+	}
+}
+
 func (s State) getSnake(id string) *Snake {
 	for k, snake := range s.Snakes {
 		if k == id {

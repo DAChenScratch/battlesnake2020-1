@@ -20,6 +20,35 @@ func GetMove(data *api.MoveRequest) Direction {
 	return Up
 }
 
+func (s *State) minimax(depth int, snakeID string, maximizing bool) float64 {
+	if depth == 0 /* or if game is over */ {
+		return s.heuristic(snakeID)
+	}
+	// children := s.getChildMoves() // TODO
+	children := [][]Move{}
+	if maximizing {
+		value := math.Inf(-1)
+		for _, child := range children {
+			s.applyAllMoves(child)
+
+			value = math.Max(value, s.minimax(depth-1, snakeID, false))
+
+			s.undoAllMoves(child)
+		}
+		return value
+	} else {
+		value := math.Inf(1)
+		for _, child := range children {
+			s.applyAllMoves(child)
+
+			value = math.Min(value, s.minimax(depth-1, snakeID, false))
+
+			s.undoAllMoves(child)
+		}
+		return value
+	}
+}
+
 func (s State) heuristic(snakeID string) float64 {
 	// TODO: Just makes you not die (sometimes) for now
 	you := s.Snakes[snakeID]
